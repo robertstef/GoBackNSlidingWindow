@@ -10,7 +10,7 @@
 int main()
 {
     QUEUE *queue;
-    int *vals;
+    int *vals, *num;
     int rv;
 
     // initialize values to put in queue
@@ -56,6 +56,54 @@ int main()
     if ( *(int *)(queue->head->item) != 1 || *(int *)(queue->tail->item) != 4
             || queue->size != 4 )
         printf("enqueue() error: adding to non-empty queue\n");
+
+    // Tests dequeue()/peek()
+    printf("Testing dequeue()/peek()\n");
+
+    num = (int *)peek(queue);
+    if ( *(num) != 1 )
+        printf("peek() error: value return should have been 1\n");
+    
+    rv = dequeue(queue);
+    if ( rv == -1 )
+        printf("dequeue() error: return value is -1\n");
+    if ( *(int *)(queue->head->item) != 2 || *(int *)(queue->tail->item) != 4
+            || queue->size != 3 )
+        printf("dequeue() error: removing 1 from non-empty queue\n");
+
+    rv = dequeue(queue);
+    if ( rv == -1 )
+        printf("dequeue() error: return value is -1\n");
+    if ( *(int *)(queue->head->item) != 3 || *(int *)(queue->tail->item) != 4
+            || queue->size != 2 )
+        printf("dequeue() error: removing 2 from non-empty queue\n");
+
+    num = (int *)peek(queue);
+    if ( *(num) != 3 )
+        printf("peek() error: value return should have been 3\n");
+
+    rv = dequeue(queue);
+    if ( rv == -1 )
+        printf("dequeue() error: return value is -1\n");
+    if ( *(int *)(queue->head->item) != 4 || *(int *)(queue->tail->item) != 4
+            || queue->size != 1 )
+        printf("dequeue() error: removing 4 from non-empty queue\n");
+
+    rv = dequeue(queue);
+    if ( rv == -1 )
+        printf("dequeue() error: return value is -1\n");
+    if ( (queue->head) != NULL || (queue->tail) != NULL || 
+            queue->size != 0 )
+        printf("dequeue() error: removing from LAST TIME non-empty queue\n");
+
+    num = (int *)peek(queue);
+    if ( num != NULL )
+        printf("peek() error: return value should be NULL\n");
+
+    rv = dequeue(queue);
+    if ( rv == 0 )
+        printf("dequeue() error: dequeuing from empty queue, rv" 
+                " should be 1\n");
 
     // clean up
     free(queue);

@@ -65,3 +65,41 @@ int enqueue(QUEUE *q, void *item)
 
     return 0;
 }
+
+int dequeue(QUEUE *q)
+{
+    // queue is empty
+    if ( q->size == 0 )
+    {
+        fprintf(stderr, "dequeue(): cannot remove item from empty queue\n");
+        return -1;
+    }
+
+    // queue contains 1 item
+    if ( q->size == 1 )
+    {
+        q->head = NULL;
+        q->tail = NULL;
+        q->size = 0;
+    }
+    // queue contains multiple items
+    else
+    {
+        q->head = q->head->next;
+        q->size--;
+    }
+
+    return 0;
+}
+
+void *peek(QUEUE *q)
+{
+    // queue is empty
+    if ( q->size == 0 )
+    {
+        fprintf(stderr, "peek(): queue is empty\n");
+        return NULL;
+    }
+    // queue is non-empty
+    return q->head->item;
+}

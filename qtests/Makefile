@@ -6,7 +6,7 @@ CC = gcc -Wall -Wextra -Wpedantic
 all: qtests
 
 qtests: queue.o qtests.o
-	$(CC) qtests.o queue.o -o qtests
+	$(CC) -g qtests.o queue.o -o qtests
 
 qtests.o: qtests.c
 	$(CC) -g -c qtests.c -o qtests.o
