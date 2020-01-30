@@ -6,11 +6,14 @@
  * A2
  */ 
 
+#ifndef QUEUE_H
+#define QUEUE_H
+
 /* Represents a node in a queue */
 typedef struct node
 {
     void *item; // data contained in node
-    NODE *next; // next item in the queue
+    struct node *next; // next item in the queue
 } NODE;
 
 /* Represents a queue */
@@ -28,20 +31,22 @@ typedef struct queue
  * None
  *
  * Output:
- * 0 on success, -1 on failure
+ * A pointer to the created QUEUE. NULL pointer
+ * if the operation fails.
  */ 
-int queueCreate(void);
+QUEUE *queueCreate(void);
 
 /*
  * Adds and item to the back of the queue.
  *
  * Input:
  * Queue *: pointer to a QUEUE
+ * void *: item to be added
  *
  * Output:
  * 0 on success, -1 on failure
  */
-int enqueue(QUEUE *)
+int enqueue(QUEUE *, void *);
 
 /*
  * Removes an item from the front of the queue.
@@ -65,3 +70,5 @@ int dequeue(QUEUE *);
  * NULL pointer if the queue is empty.
  */ 
 void *peek(QUEUE *);
+
+#endif // QUEUE_H
