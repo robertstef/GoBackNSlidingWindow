@@ -12,37 +12,39 @@
 #include "setup.h"
 
 #define MAXBUF 100
+#define PORT "30000"
 
-int main(int argc, char *argv[])
+int main()
 {
     int rv;
     SOCK_INFO *info;
     struct addrinfo hints;
     char msg[MAXBUF];
 
-    if ( argc != 3 )
+    memset(msg, 0, MAXBUF);
+    
+    if ( (info = malloc(sizeof(SOCK_INFO))) == NULL )
     {
-        printf("usage: uclient port hostname\n");
+        printf("server: malloc\n");
         exit(EXIT_FAILURE);
     }
 
-    // setup hints
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_flags = AI_PASSIVE;
 
-    if ( (info = set_active_udp(&hints, argv[1], argv[2])) == NULL )
+    if( (info->sockfd = set_passive_udp(&hints, PORT)) == -1 )
         exit(EXIT_FAILURE);
-
-    memset(msg, 0, MAXBUF);
+    
+    info->addr_len = sizeof(*(info->addr));
     while(1)
     {
-        printf(">> ");
-        fgets(msg, MAXBUF, stdin);
-        rv = send_udp(msg, MAXBUF, info);
+        rv = recv_udp(msg, MAXBUF, info);
         if ( rv == -1 )
             exit(EXIT_FAILURE);
+        printf("%s", msg);
+        memset(msg, 0, MAXBUF);
     }
-
     return 0;
 }

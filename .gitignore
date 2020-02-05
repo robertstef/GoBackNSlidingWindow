@@ -3,3 +3,8 @@ assignment2.pdf
 qtests/qtests
 assignment2.pdf
 sender
+receiver
+setuptests/tclient
+setuptests/tserver
+setuptests/uclient
+setuptests/userver

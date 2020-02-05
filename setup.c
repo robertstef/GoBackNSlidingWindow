@@ -149,7 +149,6 @@ SOCK_INFO *set_active_udp(struct addrinfo *hints, char *port, char *name)
         return NULL;
     }
 
-
     if ((rv = getaddrinfo(name, port, hints, &servinfo)) != 0) {
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
         return NULL;
