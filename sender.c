@@ -10,8 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "setup.h"
-
-#define MAXBUF 100
+#include "packet.h"
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +18,7 @@ int main(int argc, char *argv[])
     SOCK_INFO *info;
     struct addrinfo hints;
     char msg[MAXBUF];
+    PKT *pkt;
 
     if ( argc != 3 )
     {
@@ -39,7 +39,10 @@ int main(int argc, char *argv[])
     {
         printf(">> ");
         fgets(msg, MAXBUF, stdin);
-        rv = send_udp(msg, MAXBUF, info);
+        
+        pkt = create_pkt(1, msg);
+
+        rv = send_udp(pkt, PKTSZ, info);
         if ( rv == -1 )
             exit(EXIT_FAILURE);
     }
