@@ -5,7 +5,7 @@
 # A2
 
 CC = gcc -Wall -Wextra -Wpedantic
-SENDER = sender.o setup.o userinput.o packet.o
+SENDER = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
 RCVR = receiver.o setup.o packet.o recfcns.o
 
 .PHONY: all
@@ -25,6 +25,9 @@ receiver.o: receiver.c setup.h receiverfcns.h
 sender.o: sender.c userinput.h setup.h
 	$(CC) -g -c sender.c -o sender.o
 
+senderfcns.o: senderfcns.c senderfcns.h queue.h setup.h packet.h
+	$(CC) -g -c senderfcns.c -o senderfcns.o
+
 recfcns.o: receiverfcns.h receiverfcns.c userinput.h
 	$(CC) -g -c receiverfcns.c -o recfcns.o
 
@@ -36,6 +39,9 @@ userinput.o: userinput.h userinput.c
 
 setup.o: setup.h setup.c
 	$(CC) -g -c setup.c -o setup.o
+
+queue.o: queue.h queue.c
+	$(CC) -g -c queue.c -o queue.o
 
 .PHONY: clean
 clean:
