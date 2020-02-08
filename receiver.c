@@ -11,6 +11,7 @@
 #include <string.h>
 #include "setup.h"
 #include "packet.h"
+#include "receiverfcns.h"
 
 #define PORT "30000"
 
@@ -21,6 +22,8 @@ int main()
     struct addrinfo hints;
     char msg[MAXBUF];
     PKT *pkt;
+    uint cur_sn;     // seq num of the received packet
+    uint nxt_sn = 0; // seq num of next expected packet
 
     // initialize variables
     memset(msg, 0, MAXBUF);
@@ -51,9 +54,20 @@ int main()
     // main receive loop
     while(1)
     {
+        // get packet from sender
         rv = recv_udp(pkt, PKTSZ, info);
         if ( rv == -1 )
             exit(EXIT_FAILURE);
+
+        // user decides if packet was received
+        rv = pkt_recvd();
+        if ( rv )
+            fprintf(stdout, "receiving packet\n");
+        else if ( !rv )
+            fprintf(stdout, "discarding packet\n");
+        else
+            fprintf(stdout, "error\n");
+
         printf("seqnum: %d\n", pkt->seqnum);
         printf("msg: %s\n", pkt->msg);
         memset(pkt, 0, PKTSZ);

@@ -6,6 +6,8 @@
  * A2
  */
 
+#define MAXIN 50 // max size of input when prompted by the receiver
+
 /*
  * Checks if the input string is a valid IPv4
  * or IPv6 address.

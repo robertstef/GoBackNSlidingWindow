@@ -6,7 +6,7 @@
 
 CC = gcc -Wall -Wextra -Wpedantic
 SENDER = sender.o setup.o userinput.o packet.o
-RCVR = receiver.o setup.o packet.o
+RCVR = receiver.o setup.o packet.o recfcns.o
 
 .PHONY: all
 all: sender receiver
@@ -19,11 +19,14 @@ sender: $(SENDER)
 	$(CC) -g $(SENDER) -o sender
 
 # compilation for object files
-receiver.o: receiver.c setup.c
+receiver.o: receiver.c setup.h receiverfcns.h
 	$(CC) -g -c receiver.c -o receiver.o
 
 sender.o: sender.c userinput.h setup.h
 	$(CC) -g -c sender.c -o sender.o
+
+recfcns.o: receiverfcns.h receiverfcns.c userinput.h
+	$(CC) -g -c receiverfcns.c -o recfcns.o
 
 packet.o: packet.h packet.c
 	$(CC) -g -c packet.c -o packet.o
