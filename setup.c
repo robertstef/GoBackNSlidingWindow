@@ -171,7 +171,7 @@ SOCK_INFO *set_active_udp(struct addrinfo *hints, char *port, char *name)
     }
 
     // socket successfully created, package result and return
-    result->addr = p->ai_addr;
+    result->addr = *p->ai_addr;
     result->addr_len = p->ai_addrlen;
     result->sockfd = sockfd;
 
@@ -197,7 +197,7 @@ int send_udp(void *msg, int bufsize, SOCK_INFO *info)
 {
    int rv;
 
-   while ( (rv = sendto(info->sockfd, msg, bufsize, 0, info->addr, 
+   while ( (rv = sendto(info->sockfd, msg, bufsize, 0, &info->addr, 
                    info->addr_len)) < bufsize )
    {
        if ( rv == -1 )
@@ -229,7 +229,7 @@ int recv_udp(void *msg, int bufsize, SOCK_INFO *info)
     int rv;
 
     while ( (rv = recvfrom(info->sockfd, msg, bufsize, 0,
-                    info->addr, &info->addr_len)) < bufsize )
+                    &info->addr, &info->addr_len)) < bufsize )
     {
         if ( rv == -1 )
         {

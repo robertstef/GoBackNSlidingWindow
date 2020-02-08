@@ -15,10 +15,6 @@
 
 #define PORT "30000"
 
-// a macro to check if the new packet
-// is the next expected sequence number
-#define NSEQ(a, b)(a == b)
-
 int main()
 {
     int rv;
@@ -53,7 +49,7 @@ int main()
     if( (info->sockfd = set_passive_udp(&hints, PORT)) == -1 )
         exit(EXIT_FAILURE);
     
-    info->addr_len = sizeof(*(info->addr));
+    info->addr_len = sizeof(info->addr);
 
     // main receive loop
     while(1)
@@ -82,6 +78,9 @@ int main()
                     fprintf(stdout, "receiving packet\n");
                     nxt_seq++;
                     retransmission = 0;
+                    rv = send_udp(&pkt->seqnum, ACKSZ, info);
+                    if ( rv == -1 )
+                        exit(EXIT_FAILURE);
                 }
                 // discard packet
                 else if ( !rv )

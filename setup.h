@@ -20,7 +20,7 @@
  */ 
 typedef struct sock_info
 {
-    struct sockaddr *addr; // address info
+    struct sockaddr addr; // address info
     socklen_t addr_len;    // address size
     int sockfd;            // socket file descriptor 
                            // we are sending over
