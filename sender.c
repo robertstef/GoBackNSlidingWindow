@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     struct addrinfo hints;
     char msg[MAXBUF];
     PKT *pkt;
+    uint seqnum = 0;
 
     if ( argc != 3 )
     {
@@ -40,11 +41,12 @@ int main(int argc, char *argv[])
         printf(">> ");
         fgets(msg, MAXBUF, stdin);
         
-        pkt = create_pkt(1, msg);
+        pkt = create_pkt(seqnum, msg);
 
         rv = send_udp(pkt, PKTSZ, info);
         if ( rv == -1 )
             exit(EXIT_FAILURE);
+        seqnum++;
     }
 
     return 0;

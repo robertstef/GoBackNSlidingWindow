@@ -15,6 +15,10 @@
 
 #define PORT "30000"
 
+// a macro to check if the new packet
+// is the next expected sequence number
+#define NSEQ(a, b)(a == b)
+
 int main()
 {
     int rv;
@@ -22,8 +26,8 @@ int main()
     struct addrinfo hints;
     char msg[MAXBUF];
     PKT *pkt;
-    uint cur_sn;     // seq num of the received packet
-    uint nxt_sn = 0; // seq num of next expected packet
+    uint nxt_seq = 0; // seq num of next expected packet
+    int retransmission;
 
     // initialize variables
     memset(msg, 0, MAXBUF);
@@ -58,18 +62,58 @@ int main()
         rv = recv_udp(pkt, PKTSZ, info);
         if ( rv == -1 )
             exit(EXIT_FAILURE);
+        
+        // packet is next in-order message
+        if ( pkt->seqnum == nxt_seq )
+        {
+            // packet is not retransmission
+            if ( ! retransmission )
+            {
+                // print to screen
+                fprintf(stdout, "Seq num: %u\nMessage: %s\n", 
+                        pkt->seqnum, pkt->msg);
 
-        // user decides if packet was received
-        rv = pkt_recvd();
-        if ( rv )
-            fprintf(stdout, "receiving packet\n");
-        else if ( !rv )
-            fprintf(stdout, "discarding packet\n");
+                // user decides if packet was received
+                rv = pkt_recvd();
+                
+                // receive packet 
+                if ( rv )
+                {
+                    fprintf(stdout, "receiving packet\n");
+                    nxt_seq++;
+                    retransmission = 0;
+                }
+                // discard packet
+                else if ( !rv )
+                {
+                    fprintf(stdout, "discarding packet\n");
+                    retransmission = 1; // we are expecting this to get
+                                        // resent
+                    // nxt_seq stays the same
+                }
+                else
+                    fprintf(stdout, "error\n");
+            }
+            // packet is retransmission
+            else if ( retransmission )
+            {
+                // print to screen indicating retrans
+                fprintf(stdout, "RETRANSMISSION\nSeq num: %u\nMessage: %s\n",
+                        pkt->seqnum, pkt->msg);
+
+                retransmission = 0; // no longer waiting to have retransmitted
+                nxt_seq++;
+            }
+            else
+                fprintf(stderr, "Something is wrong\n");
+        }
+        // packet is out of order
         else
-            fprintf(stdout, "error\n");
+        {
+            fprintf(stdout, "MESSAGE OUT OF ORDER\nSeq num: %u\nMessage: %s\n",
+                    pkt->seqnum, pkt->msg);
+        }
 
-        printf("seqnum: %d\n", pkt->seqnum);
-        printf("msg: %s\n", pkt->msg);
         memset(pkt, 0, PKTSZ);
     }
     return 0;
