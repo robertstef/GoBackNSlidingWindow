@@ -15,6 +15,8 @@
 #ifndef PACKET_H
 #define PACKET_H
 
+#include <time.h>
+
 /* Macro definitions */
 #define MAXBUF 100 // the max message size that can be sent by the
                    // sender and the receiver
@@ -35,7 +37,8 @@ typedef unsigned int uint;
 typedef struct packet
 {
     uint seqnum;       // the sequence number of the packet
-    char msg[MAXBUF]; // message to be sent to the receiver
+    char msg[MAXBUF];  // message to be sent to the receiver
+    time_t sent;       // time message was sent
 } PKT;
 
 

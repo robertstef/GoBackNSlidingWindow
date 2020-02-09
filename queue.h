@@ -71,4 +71,9 @@ int dequeue(QUEUE *);
  */ 
 void *peek(QUEUE *);
 
+/*
+ * Returns the size of the queue
+ */
+int size(QUEUE *q);
+
 #endif // QUEUE_H

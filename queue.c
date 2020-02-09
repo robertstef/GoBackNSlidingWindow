@@ -103,3 +103,8 @@ void *peek(QUEUE *q)
     // queue is non-empty
     return q->head->item;
 }
+
+int size(QUEUE *q)
+{
+    return q->size;
+}

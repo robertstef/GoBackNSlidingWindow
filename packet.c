@@ -34,6 +34,9 @@ PKT *create_pkt(unsigned int seqnum, char *msg)
         return NULL;
     }
 
+    // set sent time to 0
+    pkt->sent = 0;
+
     return pkt;
 }
 

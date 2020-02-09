@@ -99,14 +99,19 @@ int main()
                 // print to screen indicating retrans
                 fprintf(stdout, "RETRANSMISSION\nSeq num: %u\nMessage: %s\n",
                         pkt->seqnum, pkt->msg);
-
                 retransmission = 0; // no longer waiting to have retransmitted
+
+                // send ack
+                rv = send_udp(&pkt->seqnum, ACKSZ, info);
+                if ( rv == -1 )
+                    exit(EXIT_FAILURE);
                 nxt_seq++;
             }
             else
                 fprintf(stderr, "Something is wrong\n");
         }
-        // packet is out of order
+        // packet is out of order - discard all incoming packets and wait
+        // for a timeout from the sender
         else
         {
             fprintf(stdout, "MESSAGE OUT OF ORDER\nSeq num: %u\nMessage: %s\n",

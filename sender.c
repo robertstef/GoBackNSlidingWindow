@@ -25,8 +25,6 @@ int main(int argc, char *argv[])
     SOCK_INFO *info;
     struct addrinfo hints;
     char msg[MAXBUF];
-    PKT *pkt;
-    uint seqnum = 0;
     uint maxwindow, ack;
     int timeout;
     struct pollfd *pfds;
@@ -56,7 +54,7 @@ int main(int argc, char *argv[])
     timeout = atoi(argv[4]);
     
     // set up sender functions
-    if ( (rv = sender_init(maxwindow)) == -1 )
+    if ( (rv = sender_init(maxwindow, timeout)) == -1 )
         exit(EXIT_FAILURE);
 
     // set fds to non-blocking
@@ -84,7 +82,12 @@ int main(int argc, char *argv[])
         }
 
         if ( poll_rv == 0 )
-            printf("timeout\n");
+        {
+            rv = sender_timeout(info);
+            if( rv == -1 )
+                exit(EXIT_FAILURE);
+            timeout = calc_timeout();
+        }
 
         for(int i = 0; i < FDCOUNT; i++)
         {
@@ -93,20 +96,27 @@ int main(int argc, char *argv[])
                 // read to stdin
                 if ( pfds[i].fd == STDIN_FILENO )
                 {
-                    printf("stdin\n");
-                    rv = read(STDIN_FILENO, msg, MAXBUF);
-                    pkt = create_pkt(seqnum, msg);
-                    rv = send_udp(pkt, PKTSZ, info);
+                    // get input
+                    read(STDIN_FILENO, msg, MAXBUF);
+
+                    // send to receiver if possible, or place in queue
+                    rv = sender_input(msg, info); 
                     if ( rv == -1 )
                         exit(EXIT_FAILURE);
-                    seqnum++;
+
+                    // recalcuate timeout for poll 
+                    timeout = calc_timeout();
+
                     memset(msg, 0, MAXBUF);
                 }
                 // we got an ack
                 else if ( pfds[i].fd == info->sockfd )
                 {
                     // work the ack
-                    rv = recv_udp(&ack, ACKSZ, info);
+                    if ((rv = recv_udp(&ack, ACKSZ, info)) == -1)
+                        exit(EXIT_FAILURE);
+
+                    rv = sender_ack(ack);
                     if ( rv == -1 )
                         exit(EXIT_FAILURE);
                     printf("Got ack: %u\n", ack);

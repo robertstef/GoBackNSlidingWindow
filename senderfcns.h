@@ -9,18 +9,21 @@
 #ifndef SENDERFCNS_H
 #define SENDERFCNS_H
 
+#include <time.h>
 #include "packet.h"
+#include "setup.h"
 
 /*
  * Initializes the sender application.
  *
  * Input:
  * uint wsize: size of sending window
+ * int time: timeout time from user
  *
  * Output:
  * 0 on success, -1 on failure
  */
-int sender_init(uint wsize);
+int sender_init(uint wsize, int time);
 
 /*
  * Sets up the array of struct pollfd to use with
@@ -43,14 +46,13 @@ struct pollfd *setup_pfds(int sockfd);
  * it can be sent.
  *
  * Input:
- * PKT *pkt: packet to be enqueued
- * uint base: first sequence number in the sending window
- * uint winsize: size of the sending window
+ * char *input: user input
+ * SOCK_INFO *int: socket information
  *
  * Output:
  * 0 on success, -1 on failure
  */
-int sender_input(PKT *pkt);
+int sender_input(char *input, SOCK_INFO *info);
 
 /*
  * If an ack was received from the receiver, will remove all
@@ -72,11 +74,21 @@ int sender_ack(uint ack);
  * current sending window.
  *
  * Input:
- * uint base: first sequence number in the sending window
- * uint winsize: size of sending window
+ * SOCK_INFO *info:  socket infomation
  *
  * Output:
  * 0 on success, -1 on failure
  */ 
-int sender_timeout(uint base, uint winsize);
+int sender_timeout(SOCK_INFO *info);
+
+/*
+ * Calculates the new timeout value for the next call to poll()
+ * 
+ * Input:
+ * None
+ *
+ * Output:
+ * new timeout value
+ */
+time_t calc_timeout(void);
 #endif // SENDERFCNS_H
