@@ -6,7 +6,7 @@
 
 CC = gcc -Wall -Wextra -Wpedantic
 SENDER = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
-RCVR = receiver.o setup.o packet.o recfcns.o
+RCVR = receiver.o setup.o packet.o recfcns.o queue.o
 
 .PHONY: all
 all: sender receiver
