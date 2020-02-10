@@ -127,11 +127,11 @@ int calc_prob(void)
 {
     int rv = rand() % 100; // get random number between 0 and 99
 
-    if ( prob_ack < rv )
-        return 0;
     // workaround to test with acks always being sent
-    else if ( prob_ack == 100 )
+    if ( prob_ack == 0 )
         return 1;
+    else if ( prob_ack < rv )
+        return 0;
     else
         return 1;
 }

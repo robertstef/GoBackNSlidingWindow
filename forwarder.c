@@ -14,14 +14,16 @@
 #include "packet.h"
 #include "userinput.h"
 
-#define PORT "35000"
+#define PORT "35000" // port we are listening on
 
 int main(int argc, char *argv[])
 {
     int rv;
-    SOCK_INFO *rec_info;
+    SOCK_INFO *rcvr_info;   // info for the receiver application
+    SOCK_INFO *sender_info; // info for the sender application
     struct addrinfo hints;
     PKT *pkt;
+    uint ack;
 
     // check command line input
     if ( (rv = checkinput(argc, argv)) == -1 )
@@ -36,10 +38,12 @@ int main(int argc, char *argv[])
 
     memset(pkt, 0, PKTSZ);
 
+
+
     // setup listening socket
-    if ( (rec_info = malloc(sizeof(SOCK_INFO))) == NULL )
+    if ( (sender_info = malloc(sizeof(SOCK_INFO))) == NULL )
     {
-        printf("server: malloc\n");
+        printf("forwarder: malloc\n");
         exit(EXIT_FAILURE);
     }
 
@@ -48,17 +52,47 @@ int main(int argc, char *argv[])
     hints.ai_socktype = SOCK_DGRAM;
     hints.ai_flags = AI_PASSIVE;
 
-    if( (rec_info->sockfd = set_passive_udp(&hints, PORT)) == -1 )
+    if( (sender_info->sockfd = set_passive_udp(&hints, PORT)) == -1 )
         exit(EXIT_FAILURE);
     
-    rec_info->addr_len = sizeof(rec_info->addr);
+    sender_info->addr_len = sizeof(sender_info->addr);
+
+
+
+    // setup active socket to communicate with receiver app
+    if ( (rcvr_info = malloc(sizeof(SOCK_INFO))) == NULL )
+    {
+        printf("forwarder: malloc\n");
+        exit(EXIT_FAILURE);
+    }
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_DGRAM;
+
+    if ( (rcvr_info = set_active_udp(&hints, argv[2], argv[1])) == NULL )
+        exit(EXIT_FAILURE);
+
+    rcvr_info->addr_len = sizeof(rcvr_info->addr);
 
     while(1)
     {
-        rv = recv_udp(pkt, MAXBUF, rec_info);
+        // receive packet from sender
+        rv = recv_udp(pkt, PKTSZ, sender_info);
         if ( rv == -1 )
             exit(EXIT_FAILURE);
-        printf("%s", pkt->msg);
+
+        // send packet to receiver
+        rv = send_udp(pkt, PKTSZ, rcvr_info);
+        if ( rv == -1 )
+            exit(EXIT_FAILURE);
+
+        // get ack from receiver
+        rv = recv_udp(&ack, ACKSZ, rcvr_info);
+        if ( rv == -1 )
+            exit(EXIT_FAILURE);
+
+        // send ack to sender
+        rv = send_udp(&ack, ACKSZ, sender_info);
         memset(pkt, 0, PKTSZ);
     }
 
