@@ -6,7 +6,7 @@
 
 CC = gcc -Wall -Wextra -Wpedantic
 SENDER = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
-FWDR = forwarder.o setup.o packet.o userinput.o
+FWDR = forwarder.o setup.o packet.o userinput.o fwdsend.o fwdrec.o queue.o
 RCVR = receiver.o setup.o packet.o recfcns.o queue.o
 
 .PHONY: all
@@ -25,6 +25,12 @@ forwarder: $(FWDR)
 # compilation for object files
 
 # object files for executables
+fwdsend.o: setup.h packet.h queue.h fwdsend.c fwdsend.h 
+	$(CC) -g -c fwdsend.c -o fwdsend.o
+
+fwdrec.o: fwdrec.h packet.h setup.h fwdrec.c
+	$(CC) -g -c fwdrec.c -o fwdrec.o
+
 receiver.o: receiver.c setup.h receiverfcns.h
 	$(CC) -g -c receiver.c -o receiver.o
 

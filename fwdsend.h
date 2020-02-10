@@ -6,15 +6,16 @@
  * A2
  */
 
-#ifndef SENDERFCNS_H
-#define SENDERFCNS_H
+#ifndef FWDSEND_H
+#define FWDSEND_H
 
+#include <poll.h>
 #include <time.h>
 #include "packet.h"
 #include "setup.h"
 
 /*
- * Initializes the sender application.
+ * Initializes sender portion of the forwarder.
  *
  * Input:
  * uint wsize: size of sending window
@@ -23,19 +24,20 @@
  * Output:
  * 0 on success, -1 on failure
  */
-int sender_init(uint wsize, int time);
+int fwd_send_init(uint wsize, int time);
 
 /*
  * Sets up the array of struct pollfd to use with
- * the poll function in the sender application.
+ * the poll function in the forwarder application.
  *
  * Input:
- * int sockfd: socket file descriptor
+ * int rec_fd: socket fd for listening
+ * int send_fd: socket fd for receiving
  *
  * Output:
  * Pointer to an array of struct pollfd, NULL on failure
  */
-struct pollfd *setup_pfds(int sockfd);
+struct pollfd *fwd_setup_pfds(int rec_fd, int send_fd);
 
 /*
  * If the user inputted a message add a the message to the
@@ -52,7 +54,7 @@ struct pollfd *setup_pfds(int sockfd);
  * Output:
  * 0 on success, -1 on failure
  */
-int sender_input(char *input, SOCK_INFO *info);
+int fwd_input(PKT *input, SOCK_INFO *info);
 
 /*
  * If an ack was received from the receiver, will remove all
@@ -67,7 +69,7 @@ int sender_input(char *input, SOCK_INFO *info);
  * Output:
  * 0 on success, -1 on failure
  */
-int sender_ack(uint ack);
+int fwd_ack(uint ack);
 
 /*
  * If a timeout occurred, will resend all message in the
@@ -79,7 +81,7 @@ int sender_ack(uint ack);
  * Output:
  * 0 on success, -1 on failure
  */ 
-int sender_timeout(SOCK_INFO *info);
+int fwd_timeout(SOCK_INFO *info);
 
 /*
  * Calculates the new timeout value for the next call to poll()
@@ -90,5 +92,6 @@ int sender_timeout(SOCK_INFO *info);
  * Output:
  * new timeout value
  */
-time_t calc_timeout(void);
-#endif // SENDERFCNS_H
+time_t fwd_calc_timeout(void);
+
+#endif // FWDSEND_H

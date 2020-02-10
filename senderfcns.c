@@ -22,7 +22,6 @@ QUEUE *queue; // queue of packets waiting for acks and to be sent
 
 uint base;   // lowest sequence number in sending window
 uint wsize;  // size of sending window
-uint max;    // maximum sequence number for the current window
 uint seqnum; // current sequence number
 time_t timeout; // timeout time
 
