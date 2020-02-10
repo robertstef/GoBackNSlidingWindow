@@ -62,6 +62,8 @@ int fwd_input(PKT *input, SOCK_INFO *info);
  * we got an ack for.
  *
  * Input:
+ * SOCK_INFO *sndinfo: senders socket info
+ * SOCK_INFO *recinfo: receivers socket info
  * uint ack: ack sent from the receiver where the value is the
  *           seqence number of the message we are receiving the
  *           ack for
@@ -69,7 +71,7 @@ int fwd_input(PKT *input, SOCK_INFO *info);
  * Output:
  * 0 on success, -1 on failure
  */
-int fwd_ack(uint ack);
+int fwd_ack(uint ack, SOCK_INFO *sndinfo, SOCK_INFO *recinfo);
 
 /*
  * If a timeout occurred, will resend all message in the

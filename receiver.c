@@ -94,68 +94,6 @@ int main(int argc, char *argv[])
                 exit(EXIT_FAILURE);
                 break;
         }
-
-        /*
-        // packet is next in-order message
-        if ( pkt->seqnum == nxt_seq )
-        {
-            // packet is not retransmission
-            if ( ! retransmission )
-            {
-                // print to screen
-                fprintf(stdout, "Seq num: %u\nMessage: %s\n", 
-                        pkt->seqnum, pkt->msg);
-
-                // user decides if packet was received
-                rv = pkt_recvd();
-                
-                // receive packet 
-                if ( rv )
-                {
-                    fprintf(stdout, "receiving packet\n");
-                    nxt_seq++;
-                    retransmission = 0;
-                    rv = send_udp(&pkt->seqnum, ACKSZ, info);
-                    if ( rv == -1 )
-                        exit(EXIT_FAILURE);
-                }
-                // discard packet
-                else if ( !rv )
-                {
-                    fprintf(stdout, "discarding packet\n");
-                    retransmission = 1; // we are expecting this to get
-                                        // resent
-                    // nxt_seq stays the same
-                }
-                else
-                    fprintf(stdout, "error\n");
-            }
-            // packet is retransmission
-            else if ( retransmission )
-            {
-                // print to screen indicating retrans
-                fprintf(stdout, "RETRANSMISSION\nSeq num: %u\nMessage: %s\n",
-                        pkt->seqnum, pkt->msg);
-                retransmission = 0; // no longer waiting to have retransmitted
-
-                // send ack
-                rv = send_udp(&pkt->seqnum, ACKSZ, info);
-                if ( rv == -1 )
-                    exit(EXIT_FAILURE);
-                nxt_seq++;
-            }
-            else
-                fprintf(stderr, "Something is wrong\n");
-        }
-        // packet is out of order - discard all incoming packets and wait
-        // for a timeout from the sender
-        else
-        {
-            fprintf(stdout, "MESSAGE OUT OF ORDER\nSeq num: %u\nMessage: %s\n",
-                    pkt->seqnum, pkt->msg);
-        }
-        */
-
         memset(pkt, 0, PKTSZ);
     }
     return 0;

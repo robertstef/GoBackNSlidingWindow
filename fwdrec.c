@@ -53,9 +53,11 @@ int fwd_rec_next(PKT *pkt)
 
         // update last received sequence number
         last_sn = pkt->seqnum;
+
+        return 1; // indicates we need to forward packet
     }
 
-    // packet is being discarded - do nothing
+    // packet is being discarded - indicate with return 0
     return 0;
 }
 

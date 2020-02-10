@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
         if ( poll_rv == 0 )
         {
-            printf("\nPoll() timed out\n");
+            printf("\nPoll() timed out\n\n");
             rv = sender_timeout(info);
             if( rv == -1 )
                 exit(EXIT_FAILURE);

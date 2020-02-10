@@ -93,10 +93,98 @@ int fwd_input(PKT *input, SOCK_INFO *info)
 
     return 0;
 }
-/*
-int fwd_ack(uint ack);
-int fwd_timeout(SOCK_INFO *info);
-*/
+
+int fwd_ack(uint ack, SOCK_INFO *sndinfo, SOCK_INFO *recinfo)
+{
+    PKT *pkt;
+    int rv;
+    NODE *n;
+
+    // remove the message(s) being acked
+    while( size(queue) > 0 )
+    {
+        // remove packet from queue
+        pkt = peek(queue);
+        if ( (rv = dequeue(queue)) == -1 )
+            return -1;
+
+        // if this is the ack we are looking for, stop
+        if( pkt->seqnum == ack )
+        {
+            base = ack + 1;
+            break;
+        }
+    }
+
+    // if there are unsent messages in the queue, send as
+    // many as we can
+    if ( size(queue) > 0 )
+    {
+        // send as many unsent messages as we can
+        n = queue->head;
+
+        // locate first unsent message
+        while( n != NULL )
+        {
+            pkt = n->item;
+            if( pkt->sent == 0 )
+                break;
+            n = n->next;
+        }
+
+        // sent packts until we are at the end of the queue
+        // or the sending window is full
+        if ( n != NULL )
+            pkt = n->item;
+        else
+            return 0;
+
+        while( (n != NULL) && (pkt->seqnum < MAX(base, wsize)) )
+        {
+            pkt = n->item;
+            // log send time
+            pkt->sent = time(NULL);
+            // send to receiver
+            if ((rv = send_udp(pkt, PKTSZ, recinfo)) == -1)
+                return -1;
+
+            n = n->next;
+        }
+    }
+
+    // forward ack to sender
+    if ( (rv = send_udp(&ack, ACKSZ, sndinfo)) == -1 )
+        return -1;
+
+    return 0;
+}
+
+int fwd_timeout(SOCK_INFO *info)
+{
+    int rv;
+    PKT *pkt;
+    NODE *n;
+
+    if ( size(queue) > 0 )
+    {
+        n = queue->head;
+        pkt = n->item;
+        while( (n != NULL) && (pkt->seqnum < MAX(base, wsize)) )
+        {
+            pkt = n->item;
+
+            // log send time
+            pkt->sent = time(NULL);
+            // send to receiver
+            if ((rv = send_udp(pkt, PKTSZ, info)) == -1)
+                return -1;
+
+            n = n->next;
+        }
+    }
+    return 0;
+}
+
 time_t fwd_calc_timeout(void)
 {
     PKT *pkt;

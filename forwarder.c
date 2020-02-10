@@ -113,18 +113,24 @@ int main(int argc, char *argv[])
     {
         pollrv = poll(pfds, FDCOUNT, timeout * 1000);
 
+        // poll returned error
         if ( pollrv == -1 )
         {
             perror("poll");
             exit(EXIT_FAILURE);
         }
 
+        // poll timed out
         if ( pollrv == 0 )
         {
-            printf("\nPoll() timed out\n");
+            printf("Poll() timed out\n");
+            rv = fwd_timeout(rcvr_info);
+            if ( rv == -1 )
+                exit(EXIT_FAILURE);
             timeout = fwd_calc_timeout();
         }
 
+        // there is something to read
         for(int i = 0; i < FDCOUNT; i++)
         {
             if ( pfds[i].revents & POLLIN )
@@ -144,13 +150,15 @@ int main(int argc, char *argv[])
                         // received the next in order message
                         case(NEXT):
                             // get receiver to process packet
-                            if ( (rv = fwd_rec_next(pkt)) == -1 )
-                                exit(EXIT_FAILURE);
+                            rv = fwd_rec_next(pkt);
 
-                            // pass packet to sender
-                            rv = fwd_input(pkt, rcvr_info);
-                            if ( rv == -1 )
-                                exit(EXIT_FAILURE);
+                            // if user wants to keep packet, send to receiver
+                            if (rv)
+                            {
+                                rv = fwd_input(pkt, rcvr_info);
+                                if ( rv == -1 )
+                                    exit(EXIT_FAILURE);
+                            }
 
                             // relcaculate timeout
                             timeout = fwd_calc_timeout();
@@ -166,9 +174,8 @@ int main(int argc, char *argv[])
 
                         // message was a retransmission
                         case(RETRANS):
+                            // print to stdout and pass along to receiver
                             fwd_rec_retransmission(pkt, rcvr_info);
-                            // print to stoud
-                            // forward packet to receiver
                             break;
                         default:
                             exit(EXIT_FAILURE);
@@ -176,37 +183,19 @@ int main(int argc, char *argv[])
                     }
 
                 }
-                // got something from receiver
+                // got ack from receiver
                 else if ( pfds[i].fd == rcvr_info->sockfd )
                 {
+                    // get ack
                     if ((rv = recv_udp(&ack, ACKSZ, rcvr_info)) == -1)
                         exit(EXIT_FAILURE);
 
-                    //rv = sender_ack(ack);
+                    rv = fwd_ack(ack, sender_info, rcvr_info);
                     if ( rv == -1 )
                         exit(EXIT_FAILURE);
                 }
             }
         }
-        /*
-        // receive packet from sender
-        rv = recv_udp(pkt, PKTSZ, sender_info);
-        if ( rv == -1 )
-            exit(EXIT_FAILURE);
-
-        // send packet to receiver
-        rv = send_udp(pkt, PKTSZ, rcvr_info);
-        if ( rv == -1 )
-            exit(EXIT_FAILURE);
-
-        // get ack from receiver
-        rv = recv_udp(&ack, ACKSZ, rcvr_info);
-        if ( rv == -1 )
-            exit(EXIT_FAILURE);
-
-        // send ack to sender
-        rv = send_udp(&ack, ACKSZ, sender_info);
-        */
         memset(pkt, 0, PKTSZ);
     }
 
