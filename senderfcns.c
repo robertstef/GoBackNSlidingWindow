@@ -68,8 +68,10 @@ int sender_input(char *input, SOCK_INFO *info)
     int rv;
     PKT *pkt;
     
-    pkt = create_pkt(seqnum, input);
-    
+    // create new packet
+    if ( (pkt = create_pkt(seqnum, input)) == NULL )
+        return -1;
+
     // sending window is not full
     if ( seqnum < MAX(base, wsize) )
     {
@@ -193,12 +195,11 @@ time_t calc_timeout(void)
         pkt = peek(queue);
         last_unacked = pkt->sent;
         ans = (timeout - (cur - last_unacked));
-        return ans;
+        if ( ans > 0 )
+            return ans;
+        else
+            return timeout;
     }
     else
         return timeout;
 }
-
-
-
-    

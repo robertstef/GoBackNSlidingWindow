@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
 
     while(1)
     {
+        printf("Enter a message:\n");
         poll_rv = poll(pfds, FDCOUNT, timeout * 1000);
 
         if ( poll_rv == -1 )
@@ -83,12 +84,11 @@ int main(int argc, char *argv[])
 
         if ( poll_rv == 0 )
         {
-            printf("poll() timed out\n");
+            printf("\nPoll() timed out\n");
             rv = sender_timeout(info);
             if( rv == -1 )
                 exit(EXIT_FAILURE);
             timeout = calc_timeout();
-            printf("timeout: %d\n\n", timeout);
         }
 
         for(int i = 0; i < FDCOUNT; i++)
@@ -109,7 +109,6 @@ int main(int argc, char *argv[])
                     // recalcuate timeout for poll 
                     timeout = calc_timeout();
                     printf("\n");
-                    printf("timeout: %d\n\n", timeout);
                     memset(msg, 0, MAXBUF);
                 }
                 // we got an ack
@@ -121,7 +120,6 @@ int main(int argc, char *argv[])
                     rv = sender_ack(ack);
                     if ( rv == -1 )
                         exit(EXIT_FAILURE);
-                    printf("Got ack: %u\n\n", ack);
                 }
             }
         }

@@ -125,12 +125,12 @@ int pkt_recvd(void)
 
 int calc_prob(void)
 {
-    int rv = rand() % 10; // get random number between 0 and 9
+    int rv = rand() % 100; // get random number between 0 and 99
 
     if ( prob_ack < rv )
         return 0;
-    // workout to test with acks always being sent
-    else if ( prob_ack == 11 )
+    // workaround to test with acks always being sent
+    else if ( prob_ack == 100 )
         return 1;
     else
         return 1;
