@@ -6,10 +6,11 @@
 
 CC = gcc -Wall -Wextra -Wpedantic
 SENDER = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
+FWDR = forwarder.o setup.o packet.o userinput.o
 RCVR = receiver.o setup.o packet.o recfcns.o queue.o
 
 .PHONY: all
-all: sender receiver
+all: sender receiver forwarder
 
 # compilation for executables
 receiver: $(RCVR)
@@ -18,13 +19,22 @@ receiver: $(RCVR)
 sender: $(SENDER)
 	$(CC) -g $(SENDER) -o sender
 
+forwarder: $(FWDR)
+	$(CC) -g $(FWDR) -o forwarder
+
 # compilation for object files
+
+# object files for executables
 receiver.o: receiver.c setup.h receiverfcns.h
 	$(CC) -g -c receiver.c -o receiver.o
 
 sender.o: sender.c userinput.h setup.h
 	$(CC) -g -c sender.c -o sender.o
 
+forwarder.o: forwarder.c
+	$(CC) -g -c forwarder.c -o forwarder.o
+
+# object files for helper files
 senderfcns.o: senderfcns.c senderfcns.h queue.h setup.h packet.h
 	$(CC) -g -c senderfcns.c -o senderfcns.o
 
@@ -45,4 +55,4 @@ queue.o: queue.h queue.c
 
 .PHONY: clean
 clean:
-	rm -f *.o sender receiver
+	rm -f *.o sender receiver forwarder

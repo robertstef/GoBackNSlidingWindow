@@ -63,7 +63,7 @@ int valid_uint(char *uint)
     return 0;
 }
 
-int checkin_sender(int count, char *args[])
+int checkinput(int count, char *args[])
 {
     int rv;
     

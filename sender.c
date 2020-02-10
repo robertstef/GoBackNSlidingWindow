@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     struct pollfd *pfds;
 
     // check command line input
-    if ( (rv = checkin_sender(argc, argv)) == -1 )
+    if ( (rv = checkinput(argc, argv)) == -1 )
     {
         fprintf(stderr, "usage: sender IP port maxwindow timeout\n");
         exit(EXIT_FAILURE);

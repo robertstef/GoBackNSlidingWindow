@@ -46,7 +46,7 @@ int valid_port(char *port);
 int valid_uint(char *uint);
 
 /*
- * For use by the sender application.
+ * For use by the sender and forwarder application.
  * Checks if the command line arguments are
  * of the following form:
  *
@@ -65,4 +65,4 @@ int valid_uint(char *uint);
  * Output:
  * 0 on success, -1 on failure
  */ 
-int checkin_sender(int count, char *args[]);
+int checkinput(int count, char *args[]);
