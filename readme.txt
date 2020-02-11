@@ -29,6 +29,8 @@ on two different terminal windows, or on two separate machines.
             be an integer greater than 0.
  
 
+Use ^C to exit both programs.
+
 Q2:
 
 To execute question 2 execute the following commands in the following order
@@ -64,6 +66,7 @@ on three different terminal windows, or on three separate machines.
    timeout: The timeout value for the sending window. Must
             be an integer greater than 0.
 
+Use ^C to exit each program.
 
 NOTE: after starting the program, for both question 1 and question 2,
       the user will be prompted with clear instructions for how to
