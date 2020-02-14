@@ -1,0 +1,171 @@
+Robert Stefanyshin
+ras867
+11137532
+CMPT434
+A2
+
+1. G = 11001, therefore r has length 4.
+   
+   Step 1: append r 0s to the message
+
+       10111010000
+
+   Step 2: Divide the new message by G using exclusive or arithmetic
+
+                   1101101
+              ------------
+       11001 | 10111010000
+               11001
+               -----
+                1110010000
+                11001
+                -----
+                 010110000
+                 00000
+                 -----
+                  10110000
+                  11011
+                  -----
+                  011100
+                  00000
+                  -----
+                   11100
+                   11001
+                   -----
+                    0101
+
+    Step 3: replace the 0 bits with the remainder
+
+        Checksum = 10111010101
+
+    Check for correctness:
+        Divide checksum by G, if we get the original message and no
+        remainder this means the message had no errors.
+
+                    1101101      
+               ------------
+        11001 | 10111010101
+                11001
+                -----
+                 11100
+                 11001
+                 -----
+                  01011
+                  00000
+                  -----
+                   10110
+                   11001
+                   -----
+                    11111
+                    11001
+                    -----
+                     01100
+                     00000
+                     -----
+                      11001
+                      11001
+                      -----
+                      00000
+
+
+2. For parts a-b the following constants/formulas were used:
+   
+   Speed of signal propagation through air: 3.0 x 10^8 m/s
+
+   Transmission time (TT) = packet size / data rate (bit per second)
+
+   Propagation time (PT) = distance / propagation speed
+
+   tau/t = PT / TT
+
+
+   a) Distance = 32m
+      Data rate = 100 x 10^6 bits/s
+      Frame size = 128 bytes = 1024 bits
+
+      TT = 1024 bits / 100x10^6 bit/s = 1.024x10^-5 s
+
+      PT = 32m / 3.0x10^8 m/s = 1.07x10^-7 s
+
+      tau/t = 1.07x10^-7 / 1.024x10^-5 = 0.01
+
+      Because tau/t is less than 1, CSMA would be more appropriate.
+
+      
+   b) Distance = 3.2km = 3200m
+      Data rate = 100x10^6 bits/s
+      Frame size = 128 bytes = 1024 bits
+
+      TT = 1024 bits / 100x10^6 bits/s = 1.024x10^-5 s
+
+      PT = 3200m / 3.0x10^8 m/s = 1.067x10^-5 s
+
+      tau/t = 1.067x10^-5 / 1.024x10^-5 = 1.0 (before rounding ~ 1.04)
+
+      Because tau/t is slightly greater than 1 (before rounding) ALOHA
+      is more appropriate.
+
+
+   c) Distance = 32m
+      Data rate = 5 Gbps = 5x10^9 bit/s
+      Frame size = 64 bytes = 512 bits
+
+      TT = 512 bits / 5x10^9 bits/s = 1.024x10^-7
+
+      PT = 32m / 3.0x10^8 = 1.067x10^-7
+
+      tau/t = 1.067x10^-7 / 1.024x10^-7 = 1.0 (before rounding ~ 1.04)
+
+      Because tau/t is slightly greater than 1 (before rounding) ALOHA
+      is more appropriate.
+
+ 
+3. 
+   a)
+
+      N                  | d^(b) | d^(c) | d^(d) | d^(e) | d^(f)
+      ----------------------------------------------------------
+      {a}                |  8    | inf   |  inf  |  1    |  inf
+      ----------------------------------------------------------
+      {a, e}             |  8    | inf   |   3   |  1    |  7
+      ----------------------------------------------------------
+      {a, e, d}          |  4    | inf   |   3   |  1    |  7
+      ----------------------------------------------------------
+      {a, e, d, b}       |  4    |  5    |   3   |  1    |  7
+      ----------------------------------------------------------
+      {a, e, d, b, c}    |  4    |  5    |   3   |  1    |  7
+      ----------------------------------------------------------
+      {a, e, d, b, c, f} |  4    |  5    |   3   |  1    |  7
+
+
+    b)
+    
+    Iteration | Db(a) | Dc(a) | Dd(a) | De(a) | Df(a)
+    -------------------------------------------------
+    0         | 8     | -     | -     | 1     | -
+    -------------------------------------------------
+    1         | 8     | 9     | 3     | 1     | 7
+    -------------------------------------------------
+    2         | 8     | 9     | 5     | 3     | 9
+    -------------------------------------------------
+    3         | 8     | 9     | 7     | 5     | 11
+    -------------------------------------------------
+    4         | 8     | 9     | 9     | 7     | 13
+    ------------------------------------------------
+    5         | 8     | 9     | 9     | 9     | 14
+    ------------------------------------------------
+    6         | 8     | 9     | 9     | 11    | 14
+
+
+    c)
+
+    Iteration | Db(a) | Dc(a) | Dd(a) | De(a) | Df(a)
+    -------------------------------------------------
+    0         | 8     | -     | -     | 1     | -
+    -------------------------------------------------
+    1         | 8     | 9     | 9     | 11    | -
+    -------------------------------------------------
+    2         | 8     | 9     | 9     | 11    | 14
+
+
+      
