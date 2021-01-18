@@ -1,8 +1,3 @@
-/*
- * Robert Stefanyshin
- * robertstefanyshin@gmail.com
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "../queue.h"

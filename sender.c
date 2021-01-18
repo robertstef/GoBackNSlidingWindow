@@ -1,11 +1,3 @@
-/*
- * Robert Stefanyshin
- * ras867
- * 11137532
- * CMPT434
- * A2
- */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

@@ -1,9 +1,3 @@
-# Robert Stefanyshin
-# ras867
-# 11137532
-# CMPT434
-# A2
-
 CC = gcc -Wall -Wextra -Wpedantic
 
 .PHONY: all

@@ -1,9 +1,3 @@
-# Robert Stefanyshin
-# ras867
-# 11137532
-# CMPT434
-# A2
-
 CC = gcc -Wall -Wextra -Wpedantic
 SENDER = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
 FWDR = forwarder.o setup.o packet.o userinput.o fwdsend.o fwdrec.o queue.o

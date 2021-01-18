@@ -1,11 +1,3 @@
-/*
- * Robert Stefanyshin
- * ras867
- * 11137532
- * CMPT434
- * A2
- */
-
 #define MAXIN 50 // max size of input when prompted by the receiver
 
 /*

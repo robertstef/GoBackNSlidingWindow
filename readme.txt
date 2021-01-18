@@ -1,9 +1,3 @@
-Robert Stefanyshin
-ras867
-11137532
-CMPT434
-A2
-
 Q1:
 
 To execute question 1 execute the following commands in the following order

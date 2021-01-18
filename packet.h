@@ -1,12 +1,4 @@
 /*
- * Robert Stefanyshin
- * ras867
- * 11137532
- * CMPT434
- * A2
- */
-
-/*
  * This file defines the necessary structs, datatypes, macros,
  * and functions for sending, receiving, and packaging information
  * by both the sender and receiver

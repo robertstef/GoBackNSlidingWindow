@@ -1,9 +1,3 @@
-Robert Stefanyshin
-ras867
-11137532
-CMPT434
-A2
-
 The following source files are relevant to the sender application:
 1. userinput.[ch]
 2. setup.[ch]
