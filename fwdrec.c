@@ -4,7 +4,7 @@
 #include "fwdrec.h"
 #include "packet.h"
 #include "setup.h"
-#include "userinput.h"
+#include <userinput.h>
 
 uint nxt_sn;  // next expected sequence number
 uint last_sn; // last received sequence number

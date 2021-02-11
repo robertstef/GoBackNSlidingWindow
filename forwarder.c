@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include "setup.h"
 #include "packet.h"
-#include "userinput.h"
+#include <userinput.h>
 #include "fwdsend.h"
 #include "fwdrec.h"
 

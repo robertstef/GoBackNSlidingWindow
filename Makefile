@@ -1,4 +1,10 @@
 CC = gcc -Wall -Wextra -Wpedantic
+
+SUP = src/startup
+FWD = src/forwarder
+REC = src/receiver
+SND = src/sender
+
 SENDERDEP = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
 SENDEROBJ = build/sender.o \
             build/setup.o \
@@ -41,24 +47,24 @@ forwarder: $(FWDDEP)
 fwdsend.o: setup.h packet.h queue.h fwdsend.c fwdsend.h 
 	$(CC) -g -c fwdsend.c -o build/fwdsend.o
 
-fwdrec.o: fwdrec.h packet.h setup.h fwdrec.c
-	$(CC) -g -c fwdrec.c -o build/fwdrec.o
+fwdrec.o: fwdrec.h packet.h setup.h fwdrec.c $(SUP)/userinput.h
+	$(CC) -g -I./$(SUP) -c fwdrec.c -o build/fwdrec.o
 
-forwarder.o: forwarder.c
-	$(CC) -g -c forwarder.c -o build/forwarder.o
+forwarder.o: forwarder.c $(SUP)/userinput.h
+	$(CC) -g -I./$(SUP) -c forwarder.c -o build/forwarder.o
 
 
 # object files for receiver
 receiver.o: receiver.c setup.h receiverfcns.h
 	$(CC) -g -c receiver.c -o build/receiver.o
 
-recfcns.o: receiverfcns.h receiverfcns.c userinput.h
-	$(CC) -g -c receiverfcns.c -o build/recfcns.o
+recfcns.o: receiverfcns.h receiverfcns.c $(SUP)/userinput.h
+	$(CC) -g -I./$(SUP) -c receiverfcns.c -o build/recfcns.o
 
 
 # object files for sender
-sender.o: sender.c userinput.h setup.h
-	$(CC) -g -c sender.c -o build/sender.o
+sender.o: sender.c $(SUP)/userinput.h setup.h
+	$(CC) -g -I./$(SUP) -c sender.c -o build/sender.o
 
 senderfcns.o: senderfcns.c senderfcns.h queue.h setup.h packet.h
 	$(CC) -g -c senderfcns.c -o build/senderfcns.o
@@ -68,8 +74,8 @@ senderfcns.o: senderfcns.c senderfcns.h queue.h setup.h packet.h
 packet.o: packet.h packet.c
 	$(CC) -g -c packet.c -o build/packet.o
 
-userinput.o: userinput.h userinput.c
-	$(CC) -g -c userinput.c -o build/userinput.o
+userinput.o: $(SUP)/userinput.h $(SUP)/userinput.c
+	$(CC) -g -I./$(SUP) -c $(SUP)/userinput.c -o build/userinput.o
 
 setup.o: setup.h setup.c
 	$(CC) -g -c setup.c -o build/setup.o
@@ -79,4 +85,4 @@ queue.o: queue.h queue.c
 
 .PHONY: clean
 clean:
-	rm -f *.o bin/*
+	rm -f build/*.o bin/*
