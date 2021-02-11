@@ -9,3 +9,6 @@ setuptests/tclient
 setuptests/tserver
 setuptests/uclient
 setuptests/userver
+.idea/
+build/
+bin/
