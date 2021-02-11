@@ -10,7 +10,7 @@ To execute the program, run the following commands on two different terminal win
 
 1. `receiver p_ack`
    
-   `p_ack`: An integer from 0 to 100 indicating the probability an acknowledgement is corrupted/lost. 
+   - `p_ack`: An integer from 0 to 100 indicating the probability an acknowledgement is corrupted/lost. 
 
 
 2. `sender IP port wsize timeout`
@@ -23,7 +23,7 @@ To execute the program, run the following commands on two different terminal win
 
    - `wsize`: Size of the sending window. Must be an integer greater than 0.
    
-- `timeout`: The timeout value for the sending window. Must be an integer greater than 0.
+   - `timeout`: The timeout value for the sending window. Must be an integer greater than 0.
 
 
 3. Use ^C to exit both programs when finished.
