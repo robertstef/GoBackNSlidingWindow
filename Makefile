@@ -57,11 +57,11 @@ forwarder.o: $(FWD)/forwarder.c $(UI)/userinput.h
 	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c $(FWD)/forwarder.c -o build/forwarder.o
 
 # object files for receiver
-receiver.o: receiver.c $(SUP)/setup.h receiverfcns.h $(PKT)/packet.h
-	$(CC) -g -I./$(SUP) -I./$(PKT) -c receiver.c -o build/receiver.o
+receiver.o: $(REC)/receiver.c $(SUP)/setup.h $(REC)/receiverfcns.h $(PKT)/packet.h
+	$(CC) -g -I./$(SUP) -I./$(PKT) -c $(REC)/receiver.c -o build/receiver.o
 
-recfcns.o: receiverfcns.h receiverfcns.c $(UI)/userinput.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -I./$(Q) -c receiverfcns.c -o build/recfcns.o
+recfcns.o: $(REC)/receiverfcns.h $(REC)/receiverfcns.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -I./$(Q) -c $(REC)/receiverfcns.c -o build/recfcns.o
 
 
 # object files for sender
