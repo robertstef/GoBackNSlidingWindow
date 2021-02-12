@@ -45,14 +45,14 @@ forwarder: $(FWDDEP)
 
 
 # object files for forwarder
-fwdsend.o: $(SUP)/setup.h packet.h queue.h fwdsend.c fwdsend.h
-	$(CC) -g -I./$(SUP) -c fwdsend.c -o build/fwdsend.o
+fwdsend.o: $(SUP)/setup.h packet.h queue.h $(FWD)/fwdsend.c $(FWD)/fwdsend.h
+	$(CC) -g -I./$(SUP) -c $(FWD)/fwdsend.c -o build/fwdsend.o
 
-fwdrec.o: fwdrec.h packet.h $(SUP)/setup.h fwdrec.c $(UI)/userinput.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -c fwdrec.c -o build/fwdrec.o
+fwdrec.o: $(FWD)/fwdrec.h packet.h $(SUP)/setup.h $(FWD)/fwdrec.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -c $(FWD)/fwdrec.c -o build/fwdrec.o
 
-forwarder.o: forwarder.c $(UI)/userinput.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -c forwarder.c -o build/forwarder.o
+forwarder.o: $(FWD)/forwarder.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -c $(FWD)/forwarder.c -o build/forwarder.o
 
 
 # object files for receiver
