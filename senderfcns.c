@@ -4,7 +4,7 @@
 #include <poll.h>
 #include <string.h>
 #include <time.h>
-#include "queue.h"
+#include <queue.h>
 #include <setup.h>
 #include <packet.h>
 

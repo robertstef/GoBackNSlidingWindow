@@ -5,7 +5,7 @@
 #include "receiverfcns.h"
 #include <packet.h>
 #include <setup.h>
-#include "queue.h"
+#include <queue.h>
 
 uint nxt_sn;  // next expected sequence number
 uint last_sn; // last received sequence number
