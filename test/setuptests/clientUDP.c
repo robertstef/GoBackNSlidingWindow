@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../setup.h"
+#include <setup.h>
 
 #define MAXBUF 100
 

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../setup.h"
+#include <setup.h>
 
 #define MAXBUF 100
 #define PORT "30000"
@@ -29,7 +29,7 @@ int main()
     if( (info->sockfd = set_passive_udp(&hints, PORT)) == -1 )
         exit(EXIT_FAILURE);
     
-    info->addr_len = sizeof(*(info->addr));
+    info->addr_len = sizeof((info->addr));
     while(1)
     {
         rv = recv_udp(msg, MAXBUF, info);

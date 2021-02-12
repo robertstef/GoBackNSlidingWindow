@@ -39,7 +39,8 @@ RCVROBJ = build/receiver.o \
           build/queue.o
 
 .PHONY: all
-all: sender receiver forwarder qtests
+all: sender receiver forwarder qtests \
+     uclient userver tclient tserver
 
 # compilation for executables
 receiver: $(RCVRDEP)
@@ -54,6 +55,18 @@ forwarder: $(FWDDEP)
 qtests: queue.o qtests.o
 	$(CC) -g build/qtests.o build/queue.o -o bin/qtests
 
+uclient: setup.o uclient.o
+	$(CC) -g build/setup.o build/uclient.o -o bin/uclient
+
+userver: setup.o userver.o
+	$(CC) -g build/setup.o build/userver.o -o bin/userver
+
+tclient: setup.o tclient.o
+	$(CC) -g build/setup.o build/tclient.o -o bin/tclient
+
+tserver: setup.o tserver.o
+	$(CC) -g build/setup.o build/tserver.o -o bin/tserver
+
 
 # object files for queue tests
 qtests.o: $(QT)/qtests.c
@@ -61,6 +74,33 @@ qtests.o: $(QT)/qtests.c
           -I./$(Q) \
           -c $(QT)/qtests.c \
           -o build/qtests.o
+
+
+# object files for setup tests
+uclient.o: $(ST)/clientUDP.c $(SUP)/setup.h
+	$(CC) -g \
+          -I./$(SUP) \
+          -c $(ST)/clientUDP.c \
+          -o build/uclient.o
+
+userver.o: $(ST)/serverUDP.c $(SUP)/setup.h
+	$(CC) -g \
+          -I./$(SUP) \
+          -c $(ST)/serverUDP.c \
+          -o build/userver.o
+
+tclient.o: $(ST)/clientTCP.c
+	$(CC) -g \
+          -I./$(SUP) \
+          -c $(ST)/clientTCP.c \
+          -o build/tclient.o
+
+tserver.o: $(ST)/serverTCP.c
+	$(CC) -g \
+          -I./$(SUP) \
+          -c $(ST)/serverTCP.c \
+          -o build/tserver.o
+
 
 # object files for forwarder
 fwdsend.o: $(SUP)/setup.h $(PKT)/packet.h $(Q)/queue.h $(FWD)/fwdsend.c $(FWD)/fwdsend.h
