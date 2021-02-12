@@ -1,5 +1,6 @@
 CC = gcc -Wall -Wextra -Wpedantic
 
+# paths for source files
 SUP = src/setup
 UI = src/userinput
 FWD = src/forwarder
@@ -7,6 +8,11 @@ REC = src/receiver
 SND = src/sender
 PKT = src/packet
 Q = src/queue
+
+# paths for test files
+QT = test/qtests
+ST = test/setuptests
+
 
 SENDERDEP = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
 SENDEROBJ = build/sender.o \
@@ -33,7 +39,7 @@ RCVROBJ = build/receiver.o \
           build/queue.o
 
 .PHONY: all
-all: sender receiver forwarder
+all: sender receiver forwarder qtests
 
 # compilation for executables
 receiver: $(RCVRDEP)
@@ -45,6 +51,16 @@ sender: $(SENDERDEP)
 forwarder: $(FWDDEP)
 	$(CC) -g $(FWDOBJ) -o bin/forwarder
 
+qtests: queue.o qtests.o
+	$(CC) -g build/qtests.o build/queue.o -o bin/qtests
+
+
+# object files for queue tests
+qtests.o: $(QT)/qtests.c
+	$(CC) -g \
+          -I./$(Q) \
+          -c $(QT)/qtests.c \
+          -o build/qtests.o
 
 # object files for forwarder
 fwdsend.o: $(SUP)/setup.h $(PKT)/packet.h $(Q)/queue.h $(FWD)/fwdsend.c $(FWD)/fwdsend.h
