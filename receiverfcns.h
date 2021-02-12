@@ -1,4 +1,4 @@
-#include "packet.h"
+#include <packet.h>
 #include <setup.h>
 
 /* Define the three possible situations that can occur

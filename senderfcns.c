@@ -6,7 +6,7 @@
 #include <time.h>
 #include "queue.h"
 #include <setup.h>
-#include "packet.h"
+#include <packet.h>
 
 #define MAX(a, b) (a + b)
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <userinput.h>
 #include "receiverfcns.h"
-#include "packet.h"
+#include <packet.h>
 #include <setup.h>
 #include "queue.h"
 

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <setup.h>
-#include "packet.h"
+#include <packet.h>
 #include "receiverfcns.h"
 
 #define PORT "30000"

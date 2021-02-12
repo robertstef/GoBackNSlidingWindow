@@ -2,7 +2,7 @@
 #define SENDERFCNS_H
 
 #include <time.h>
-#include "packet.h"
+#include <packet.h>
 #include <setup.h>
 
 /*

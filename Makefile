@@ -5,6 +5,7 @@ UI = src/userinput
 FWD = src/forwarder
 REC = src/receiver
 SND = src/sender
+PKT = src/packet
 
 SENDERDEP = sender.o setup.o userinput.o packet.o senderfcns.o queue.o
 SENDEROBJ = build/sender.o \
@@ -45,35 +46,34 @@ forwarder: $(FWDDEP)
 
 
 # object files for forwarder
-fwdsend.o: $(SUP)/setup.h packet.h queue.h $(FWD)/fwdsend.c $(FWD)/fwdsend.h
-	$(CC) -g -I./$(SUP) -c $(FWD)/fwdsend.c -o build/fwdsend.o
+fwdsend.o: $(SUP)/setup.h $(PKT)/packet.h queue.h $(FWD)/fwdsend.c $(FWD)/fwdsend.h
+	$(CC) -g -I./$(SUP) -I./$(PKT) -c $(FWD)/fwdsend.c -o build/fwdsend.o
 
-fwdrec.o: $(FWD)/fwdrec.h packet.h $(SUP)/setup.h $(FWD)/fwdrec.c $(UI)/userinput.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -c $(FWD)/fwdrec.c -o build/fwdrec.o
+fwdrec.o: $(FWD)/fwdrec.h $(PKT)/packet.h $(SUP)/setup.h $(FWD)/fwdrec.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c $(FWD)/fwdrec.c -o build/fwdrec.o
 
 forwarder.o: $(FWD)/forwarder.c $(UI)/userinput.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -c $(FWD)/forwarder.c -o build/forwarder.o
-
+	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c $(FWD)/forwarder.c -o build/forwarder.o
 
 # object files for receiver
-receiver.o: receiver.c $(SUP)/setup.h receiverfcns.h
-	$(CC) -g -I./$(SUP) -c receiver.c -o build/receiver.o
+receiver.o: receiver.c $(SUP)/setup.h receiverfcns.h $(PKT)/packet.h
+	$(CC) -g -I./$(SUP) -I./$(PKT) -c receiver.c -o build/receiver.o
 
 recfcns.o: receiverfcns.h receiverfcns.c $(UI)/userinput.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -c receiverfcns.c -o build/recfcns.o
+	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c receiverfcns.c -o build/recfcns.o
 
 
 # object files for sender
 sender.o: sender.c $(UI)/userinput.h $(SUP)/setup.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -c sender.c -o build/sender.o
+	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c sender.c -o build/sender.o
 
-senderfcns.o: senderfcns.c senderfcns.h queue.h $(SUP)/setup.h packet.h
-	$(CC) -g -I./$(SUP) -c senderfcns.c -o build/senderfcns.o
+senderfcns.o: senderfcns.c senderfcns.h queue.h $(SUP)/setup.h $(PKT)/packet.h
+	$(CC) -g -I./$(SUP) -I./$(PKT) -c senderfcns.c -o build/senderfcns.o
 
 
 # object files for helpers/setup
-packet.o: packet.h packet.c
-	$(CC) -g -c packet.c -o build/packet.o
+packet.o: $(PKT)/packet.h $(PKT)/packet.c
+	$(CC) -g -c $(PKT)/packet.c -o build/packet.o
 
 userinput.o: $(UI)/userinput.h $(UI)/userinput.c
 	$(CC) -g -c $(UI)/userinput.c -o build/userinput.o
