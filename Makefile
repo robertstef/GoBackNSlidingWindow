@@ -1,6 +1,7 @@
 CC = gcc -Wall -Wextra -Wpedantic
 
-SUP = src/startup
+SUP = src/setup
+UI = src/userinput
 FWD = src/forwarder
 REC = src/receiver
 SND = src/sender
@@ -47,24 +48,24 @@ forwarder: $(FWDDEP)
 fwdsend.o: $(SUP)/setup.h packet.h queue.h fwdsend.c fwdsend.h
 	$(CC) -g -I./$(SUP) -c fwdsend.c -o build/fwdsend.o
 
-fwdrec.o: fwdrec.h packet.h $(SUP)/setup.h fwdrec.c $(SUP)/userinput.h
-	$(CC) -g -I./$(SUP) -c fwdrec.c -o build/fwdrec.o
+fwdrec.o: fwdrec.h packet.h $(SUP)/setup.h fwdrec.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -c fwdrec.c -o build/fwdrec.o
 
-forwarder.o: forwarder.c $(SUP)/userinput.h
-	$(CC) -g -I./$(SUP) -c forwarder.c -o build/forwarder.o
+forwarder.o: forwarder.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -c forwarder.c -o build/forwarder.o
 
 
 # object files for receiver
 receiver.o: receiver.c $(SUP)/setup.h receiverfcns.h
 	$(CC) -g -I./$(SUP) -c receiver.c -o build/receiver.o
 
-recfcns.o: receiverfcns.h receiverfcns.c $(SUP)/userinput.h
-	$(CC) -g -I./$(SUP) -c receiverfcns.c -o build/recfcns.o
+recfcns.o: receiverfcns.h receiverfcns.c $(UI)/userinput.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -c receiverfcns.c -o build/recfcns.o
 
 
 # object files for sender
-sender.o: sender.c $(SUP)/userinput.h $(SUP)/setup.h
-	$(CC) -g -I./$(SUP) -c sender.c -o build/sender.o
+sender.o: sender.c $(UI)/userinput.h $(SUP)/setup.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -c sender.c -o build/sender.o
 
 senderfcns.o: senderfcns.c senderfcns.h queue.h $(SUP)/setup.h packet.h
 	$(CC) -g -I./$(SUP) -c senderfcns.c -o build/senderfcns.o
@@ -74,8 +75,8 @@ senderfcns.o: senderfcns.c senderfcns.h queue.h $(SUP)/setup.h packet.h
 packet.o: packet.h packet.c
 	$(CC) -g -c packet.c -o build/packet.o
 
-userinput.o: $(SUP)/userinput.h $(SUP)/userinput.c
-	$(CC) -g -I./$(SUP) -c $(SUP)/userinput.c -o build/userinput.o
+userinput.o: $(UI)/userinput.h $(UI)/userinput.c
+	$(CC) -g -c $(UI)/userinput.c -o build/userinput.o
 
 setup.o: $(SUP)/setup.h $(SUP)/setup.c
 	$(CC) -g -c $(SUP)/setup.c -o build/setup.o
