@@ -3,7 +3,7 @@
 
 #include <time.h>
 #include "packet.h"
-#include "setup.h"
+#include <setup.h>
 
 /*
  * Initializes the sender application.

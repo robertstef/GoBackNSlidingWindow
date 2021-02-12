@@ -44,10 +44,10 @@ forwarder: $(FWDDEP)
 
 
 # object files for forwarder
-fwdsend.o: setup.h packet.h queue.h fwdsend.c fwdsend.h 
-	$(CC) -g -c fwdsend.c -o build/fwdsend.o
+fwdsend.o: $(SUP)/setup.h packet.h queue.h fwdsend.c fwdsend.h
+	$(CC) -g -I./$(SUP) -c fwdsend.c -o build/fwdsend.o
 
-fwdrec.o: fwdrec.h packet.h setup.h fwdrec.c $(SUP)/userinput.h
+fwdrec.o: fwdrec.h packet.h $(SUP)/setup.h fwdrec.c $(SUP)/userinput.h
 	$(CC) -g -I./$(SUP) -c fwdrec.c -o build/fwdrec.o
 
 forwarder.o: forwarder.c $(SUP)/userinput.h
@@ -55,19 +55,19 @@ forwarder.o: forwarder.c $(SUP)/userinput.h
 
 
 # object files for receiver
-receiver.o: receiver.c setup.h receiverfcns.h
-	$(CC) -g -c receiver.c -o build/receiver.o
+receiver.o: receiver.c $(SUP)/setup.h receiverfcns.h
+	$(CC) -g -I./$(SUP) -c receiver.c -o build/receiver.o
 
 recfcns.o: receiverfcns.h receiverfcns.c $(SUP)/userinput.h
 	$(CC) -g -I./$(SUP) -c receiverfcns.c -o build/recfcns.o
 
 
 # object files for sender
-sender.o: sender.c $(SUP)/userinput.h setup.h
+sender.o: sender.c $(SUP)/userinput.h $(SUP)/setup.h
 	$(CC) -g -I./$(SUP) -c sender.c -o build/sender.o
 
-senderfcns.o: senderfcns.c senderfcns.h queue.h setup.h packet.h
-	$(CC) -g -c senderfcns.c -o build/senderfcns.o
+senderfcns.o: senderfcns.c senderfcns.h queue.h $(SUP)/setup.h packet.h
+	$(CC) -g -I./$(SUP) -c senderfcns.c -o build/senderfcns.o
 
 
 # object files for helpers/setup
@@ -77,8 +77,8 @@ packet.o: packet.h packet.c
 userinput.o: $(SUP)/userinput.h $(SUP)/userinput.c
 	$(CC) -g -I./$(SUP) -c $(SUP)/userinput.c -o build/userinput.o
 
-setup.o: setup.h setup.c
-	$(CC) -g -c setup.c -o build/setup.o
+setup.o: $(SUP)/setup.h $(SUP)/setup.c
+	$(CC) -g -c $(SUP)/setup.c -o build/setup.o
 
 queue.o: queue.h queue.c
 	$(CC) -g -c queue.c -o build/queue.o

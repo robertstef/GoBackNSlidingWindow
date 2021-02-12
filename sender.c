@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <userinput.h>
-#include "setup.h"
+#include <setup.h>
 #include "packet.h"
 #include "senderfcns.h"
 

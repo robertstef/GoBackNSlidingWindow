@@ -4,7 +4,7 @@
 #include <poll.h>
 #include <time.h>
 #include "packet.h"
-#include "setup.h"
+#include <setup.h>
 
 /*
  * Initializes sender portion of the forwarder.

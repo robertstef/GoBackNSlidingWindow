@@ -1,5 +1,5 @@
 #include "packet.h"
-#include "setup.h"
+#include <setup.h>
 
 /* Define the three possible situations that can occur
  * when receiving a new packet from the sender.

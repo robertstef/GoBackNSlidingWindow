@@ -4,7 +4,7 @@
 #include <userinput.h>
 #include "receiverfcns.h"
 #include "packet.h"
-#include "setup.h"
+#include <setup.h>
 #include "queue.h"
 
 uint nxt_sn;  // next expected sequence number

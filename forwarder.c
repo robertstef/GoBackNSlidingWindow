@@ -4,7 +4,7 @@
 #include <string.h>
 #include <poll.h>
 #include <fcntl.h>
-#include "setup.h"
+#include <setup.h>
 #include "packet.h"
 #include <userinput.h>
 #include "fwdsend.h"

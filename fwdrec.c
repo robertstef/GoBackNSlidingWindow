@@ -3,7 +3,7 @@
 #include <string.h>
 #include "fwdrec.h"
 #include "packet.h"
-#include "setup.h"
+#include <setup.h>
 #include <userinput.h>
 
 uint nxt_sn;  // next expected sequence number

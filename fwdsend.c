@@ -4,7 +4,7 @@
 #include <string.h>
 #include "fwdsend.h"
 #include "queue.h"
-#include "setup.h"
+#include <setup.h>
 #include "packet.h"
 
 #define MAX(a, b) (a + b)
