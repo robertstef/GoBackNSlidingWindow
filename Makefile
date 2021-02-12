@@ -65,11 +65,11 @@ recfcns.o: $(REC)/receiverfcns.h $(REC)/receiverfcns.c $(UI)/userinput.h
 
 
 # object files for sender
-sender.o: sender.c $(UI)/userinput.h $(SUP)/setup.h
-	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c sender.c -o build/sender.o
+sender.o: $(SND)/sender.c $(UI)/userinput.h $(SUP)/setup.h
+	$(CC) -g -I./$(SUP) -I./$(UI) -I./$(PKT) -c $(SND)/sender.c -o build/sender.o
 
-senderfcns.o: senderfcns.c senderfcns.h $(Q)/queue.h $(SUP)/setup.h $(PKT)/packet.h
-	$(CC) -g -I./$(SUP) -I./$(PKT) -I./$(Q) -c senderfcns.c -o build/senderfcns.o
+senderfcns.o: $(SND)/senderfcns.c $(SND)/senderfcns.h $(Q)/queue.h $(SUP)/setup.h $(PKT)/packet.h
+	$(CC) -g -I./$(SUP) -I./$(PKT) -I./$(Q) -c $(SND)/senderfcns.c -o build/senderfcns.o
 
 
 # object files for helpers/setup
